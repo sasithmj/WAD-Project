@@ -1,3 +1,40 @@
+<?php
+
+if ($_SERVER["REQUEST_METHOD"] === "GET") {
+
+    $message = null;
+    if (isset($_GET["state"])) {
+        $status = $_GET["state"];
+        if ($status == 0) {
+            $message = '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <strong>Connection Problem ! Try Again.
+                        <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                        </div>';
+        } else if ($status == 1) {
+
+
+            $message = '<div class="alert alert-warning alert-dismissible fade show" role="alert">
+                        <strong>Fill All Feilds!
+                        <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                        </div>';
+        } else if ($status == 3) {
+
+            $message = '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <strong>Email Or Passowrd incorrect!
+                        <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                        </div>';
+        }
+    }
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -15,7 +52,7 @@
             <div class="col">
                 <img src="../src/login.jpg" class="login-hero" />
             </div>
-            <div class="col align-items-center col-right-login" >
+            <div class="col align-items-center col-right-login">
                 <div class="row align-items-center">
                     <div class="p-3">
                         <div class="mb-5">
@@ -23,15 +60,16 @@
                             <div>to your parking assistance.</div>
                         </div>
 
-                        <form action="home.html">
+                        <form action="../controllers/logincon.php" method="POST">
                             <div class="form-group pt-2 pb-2">
                                 <label for="exampleInputEmail1" class="text-secondary">Email address</label>
-                                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" />
+                                <input type="email" name="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" />
                             </div>
                             <div class="form-group pt-2 pb-2">
                                 <label for="exampleInputPassword1" class="text-secondary">Password</label>
-                                <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" />
+                                <input type="password" name="password" class="form-control" id="exampleInputPassword1" placeholder="Password" />
                             </div>
+                            <?php echo $message ?>
                             <div style="text-align: right; margin-bottom: 5px">
                                 <label class="form-check-label" for="exampleCheck1"><a href="#" style="color: #256d85; text-decoration: none">Forgot password?</a></label>
                             </div>
