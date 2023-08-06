@@ -1,3 +1,24 @@
+<?php
+require("../classes/Parkings/Parking.php");
+
+$parkings = new Parking();
+
+
+if ($_SERVER["REQUEST_METHOD"] === "GET") {
+    if (isset($_GET["type"])) {
+        $vehitype = $_GET["type"];
+        if ($vehitype == "all") {
+            $allparkings = $parkings->getAllParkings();
+        } else {
+            $allparkings = $parkings->getParkingByVehicle($vehitype);
+        }
+    } else {
+        $allparkings = $parkings->getAllParkings();
+    }
+} else {
+}
+?>
+
 <!DOCTYPE html>
 <!--
 To change this license header, choose License Headers in Project Properties.
@@ -42,47 +63,47 @@ and open the template in the editor.
         </div>
     </div>
 
+
     <div class="container mt-4">
         <div class="row" style="margin-left:0px;">
             <div class="col-3 vehi">
-                <div class="card p-3" id="car" onclick="setActiveVehicle('car')">
+                <a class="card p-3" id="car" onclick="setActiveVehicle('car')" href="../pages/home.php?type=car" style="text-decoration:none">
                     <img class="card-img-top vehi-img" src="../src/car.png" alt="Card image cap">
                     <div class="card-body">
                         <h5 class="card-title">Car</h5>
-
                     </div>
-                </div>
-
+                </a>
             </div>
             <div class="col-3 vehi">
-                <div class="card p-3" id="van" onclick="setActiveVehicle('van')">
+                <a class="card p-3" id="van" onclick="setActiveVehicle('van')" href="../pages/home.php?type=van" style="text-decoration:none">
                     <img class="card-img-top vehi-img" src="../src/van.png" alt="Card image cap">
                     <div class="card-body">
                         <h5 class="card-title">Van</h5>
 
                     </div>
-                </div>
+                </a>
             </div>
             <div class="col-3 vehi">
-                <div class="card p-3" id="bike" onclick="setActiveVehicle('bike')">
+                <a class="card p-3" id="bike" onclick="setActiveVehicle('bike')" href="../pages/home.php?type=bike" style="text-decoration:none">
                     <img class="card-img-top vehi-img" src="../src/bike.png" alt="Card image cap">
                     <div class="card-body">
                         <h5 class="card-title">Bike</h5>
 
                     </div>
-                </div>
+                </a>
             </div>
             <div class="col-3 vehi">
-                <div class="card p-3" id="lorry" onclick="setActiveVehicle('lorry')">
+                <a class="card p-3" id="lorry" onclick="setActiveVehicle('lorry')" href="../pages/home.php?type=lorry" style="text-decoration:none">
                     <img class="card-img-top vehi-img" src="../src/lorry.png" alt="Card image cap">
                     <div class="card-body">
                         <h5 class="card-title">Lorry</h5>
 
                     </div>
-                </div>
+                </a>
             </div>
         </div>
     </div>
+
 
     <div class="container mt-4">
         <div class="d-flex">
@@ -92,7 +113,33 @@ and open the template in the editor.
             </div>
         </div>
         <div class="row mt-4 gy-2" style="margin-left:0px;">
-            <div class="col-6  col-md-4 col-lg-3">
+            <?php
+            for ($i = 0; $i <= count($allparkings) - 1; $i++) { ?>
+                <div class="col-6  col-md-4 col-lg-3">
+                    <a href="../pages/reserveslot.php?id=<?php echo $allparkings[$i]["Park_id"]; ?>&slot=<?php echo $allparkings[$i]["Slot_type_id"]; ?>" style="text-decoration:none;color:black">
+                        <div class="card">
+                            <img class="card-img-top" src="../src/parking.jpg" alt="Card image cap">
+                            <div class="card-body">
+                                <h5 class="card-title text-truncate"><?php echo $allparkings[$i]["Park_name"]; ?></h5>
+                                <h6 class="card-subtitle text-muted"><?php echo $allparkings[$i]["Location"]; ?></h6>
+                                <div class="card-foot">
+                                    <span class="card-text"><?php echo $allparkings[$i]["Slot_price"]; ?>/h</span>
+                                    <span class="card-text"><?php echo $allparkings[$i]["Available_slots"] . " " . $allparkings[$i]["Vehicle_type"]; ?> slots</span>
+                                </div>
+
+                                <a href="#" class="btn btn-primary w-100">View</a>
+                            </div>
+                        </div>
+
+                    </a>
+
+                </div>
+
+            <?php
+            }
+
+            ?>
+            <!-- <div class="col-6  col-md-4 col-lg-3">
                 <a href="../pages/reserveslot.php" style="text-decoration:none;color:black">
                     <div class="card">
                         <img class="card-img-top" src="../src/parking.jpg" alt="Card image cap">
@@ -177,9 +224,9 @@ and open the template in the editor.
 
             </div>
 
-        </div>
+        </div> -->
 
-    </div>
+        </div>
     </div>
     <?php
     require_once('../includes/footer.php');

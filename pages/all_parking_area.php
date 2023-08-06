@@ -1,3 +1,20 @@
+<?php
+require("../classes/Parkings/Parking.php");
+
+$parkings = new Parking();
+$allparkings = $parkings->getAllParkings();
+
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $vehitype = $_POST["filtervehi"];
+    if ($vehitype == "all") {
+        $allparkings = $parkings->getAllParkings();
+    } else {
+        $allparkings = $parkings->getParkingByVehicle($vehitype);
+    }
+}
+
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -16,9 +33,9 @@
     ?>
     <div class="container">
         <div class="container mt-4">
-            <form>
+            <form action="<?php $_SERVER['PHP_SELF'] ?>" method="POST">
                 <div class="row justify-around align-center">
-                    <div class="col-sm d-flex justify-center align-center mb-3">
+                    <div class="col-sm d-flex justify-center align-center">
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <div class="input-group-text"><img src="../src/search.png" style="width:100%;height:24px"></div>
@@ -27,21 +44,50 @@
                         </div>
                     </div>
                     <div class="col-sm d-flex justify-content-end">
-                        <select class="custom-select w-25" id="inlineFormCustomSelect">
-                            <option selected>Car</option>
-                            <option value="1">Van</option>
-                            <option value="2">Bike</option>
-                            <option value="3">Lorry</option>
-                            <option value="4">Other</option>
+                        <select class="custom-select w-25 mr-2" id="inlineFormCustomSelect" name="filtervehi">
+                            <option selected value="all">All</option>
+                            <option value="car">Car</option>
+                            <option value="van">Van</option>
+                            <option value="bike">Bike</option>
+                            <option value="lorry">Lorry</option>
+                            <option value="other">Other</option>
                         </select>
+                        <input type="submit" class="btn btn-primary" value="Filter" /><i class="bi bi-funnel"></i>
                     </div>
+
                 </div>
             </form>
         </div>
 
         <div class="container mt-4">
             <div class="row gx-2 gy-2">
-                <div class="col">
+                <?php
+                for ($i = 0; $i <= count($allparkings) - 1; $i++) { ?>
+                    <div class="col-6  col-md-4 col-lg-3">
+                        <a href="../pages/reserveslot.php?id=<?php echo $allparkings[$i]["Park_id"]; ?>&slot=<?php echo $allparkings[$i]["Slot_type_id"]; ?>" style="text-decoration:none;color:black">
+                            <div class="card">
+                                <img class="card-img-top" src="../src/parking.jpg" alt="Card image cap">
+                                <div class="card-body">
+                                    <h5 class="card-title text-truncate"><?php echo $allparkings[$i]["Park_name"]; ?></h5>
+                                    <h6 class="card-subtitle text-muted"><?php echo $allparkings[$i]["Location"]; ?></h6>
+                                    <div class="card-foot">
+                                        <span class="card-text"><?php echo $allparkings[$i]["Slot_price"]; ?>/h</span>
+                                        <span class="card-text"><?php echo $allparkings[$i]["Available_slots"] . " " . $allparkings[$i]["Vehicle_type"]; ?> slots</span>
+                                    </div>
+
+                                    <a href="#" class="btn btn-primary w-100">View</a>
+                                </div>
+                            </div>
+
+                        </a>
+
+                    </div>
+
+                <?php
+                }
+
+                ?>
+                <!-- <div class="col">
                     <a href="../pages/reserveslot.php" style="text-decoration:none;color:black" class="all">
                         <div class="card">
                             <img class="card-img-top" src="../src/parking.jpg" alt="Card image cap">
@@ -126,9 +172,9 @@
                     </a>
                 </div>
 
+            </div> -->
             </div>
         </div>
-    </div>
     </div>
 
     <?php

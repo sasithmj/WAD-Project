@@ -7,7 +7,7 @@ class DBConnector{
     private $SERVER="localhost";
     private $USER="root";
     private $PASSWORD="";
-    private $DB="parking_managementdb";
+    private $DB="parkingscout";
 
     function getConnection(){
         try{

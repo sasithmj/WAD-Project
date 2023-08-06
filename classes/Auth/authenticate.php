@@ -13,12 +13,12 @@ class UserAuth
         try {
             $dbcon = new DBConnector();
             $connection = $dbcon->getConnection();
-            $query = "SELECT password,name FROM user where email='" . $email . "';";
+            $query = "SELECT Password,Name FROM user where Email='" . $email . "';";
             $result = $connection->query($query);
             if ($result) {
                 $row = $result->fetch();
-                if ($row['password'] === $psw) {
-                    $user = new User($row['name'], $email);
+                if ($row['Password'] === $psw) {
+                    $user = new User($row['Name'], $email);
                     $user->setUserCookei();
                     header("Location: ../pages/home.php");
                 }else{
@@ -39,9 +39,9 @@ class UserAuth
         try {
             $dbcon = new DBConnector();
             $connection = $dbcon->getConnection();
-            $query = "INSERT INTO user (name,phone_no,email,password) values (?,?,?,?);";
+            $query = "INSERT INTO user (Name,Password,Email,Phone_number,User_role) values (?,?,?,?,?);";
             $pstmt = $connection->prepare($query);
-            $pstmt->execute([$name, $phone, $email, $psw]);
+            $pstmt->execute([$name, $psw, $email, $phone,"User"]);
 
             $user = new User($name, $email);
             $user->setUserCookei();
